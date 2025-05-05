@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.adrian.demojpa.application.service.PersonService;
 import com.adrian.demojpa.application.service.ProjectService;
@@ -19,11 +20,12 @@ import com.adrian.demojpa.domain.RoleRequest;
 
 import jakarta.validation.Valid;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -64,6 +66,28 @@ public class ApiController {
     @ResponseStatus(HttpStatus.CREATED)
     public Rol newRole(@Valid @RequestBody RoleRequest role){
         return personService.createNewRol(role.getName());
+    }
+
+    //put
+    @PutMapping("/{id}")
+    public ResponseEntity<Rol> updateRole(@PathVariable Long id, @RequestBody Rol rolUp) {
+        try {
+            Rol rolU = personService.updateRol(id, rolUp.getName());
+            return ResponseEntity.ok(rolU);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //delete
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRol(@PathVariable Long id){
+        try {
+            personService.deleteRol(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/projects")    

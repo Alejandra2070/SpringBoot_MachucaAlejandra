@@ -10,4 +10,8 @@ public interface PersonService {
     public List<Person> findAllUsersByFilter(String filter, String value);
     public List<Rol> findAllRolesByFilter(String filter, String value);
     public Rol createNewRol(String name);
+    //put
+    public Rol updateRol(Long id, String name);
+    //delete
+    void deleteRol(Long id);
 }

@@ -9,4 +9,6 @@ import com.adrian.demojpa.domain.Rol;
 
 public interface RoleRepository extends JpaRepository<Rol, Long>{
     Optional<Rol>findByName(String name);
+    //put
+    Optional<Rol>findById(Long id);
 }

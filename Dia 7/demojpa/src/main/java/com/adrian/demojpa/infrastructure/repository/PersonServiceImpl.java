@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.adrian.demojpa.application.service.PersonService;
 import com.adrian.demojpa.domain.Person;
@@ -52,5 +53,32 @@ public class PersonServiceImpl implements PersonService {
 
     private Optional<Rol> getRolByName(String rolName){
         return roleRepository.findByName(rolName);
+    }
+
+    //put
+    @Override
+    public Rol updateRol(Long id, String name){
+        Optional<Rol> findRol = roleRepository.findById(id);
+
+        if (findRol.isPresent()) {
+            Rol existRol = findRol.get();
+            existRol.setName(name);
+
+            return roleRepository.save(existRol);
+        }
+        else{
+            throw new RuntimeException("El rol con id" + id + " no existe");
+        }
+    }
+
+    //delete
+    @Override
+    public void deleteRol(Long id){
+        if(roleRepository.existsById(id)){
+            roleRepository.deleteById(id);
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El rol con id " + id + " no existe");
+        }
     }
 }

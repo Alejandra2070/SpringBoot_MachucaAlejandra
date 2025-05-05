@@ -22,7 +22,9 @@ public class ProductController {
         @RequestParam(required = false) String category
     ) {
       	//Aplica los filtros de minPrice, maxPrice y category, recuerda que pueden aplicarse todos o ninguno
-        repo = 
+
+        List<Product> listadoFiltrado = repo.findAll().stream()
+            .filter
         return listadoFiltrado;
     }
 }
